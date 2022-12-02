@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { Story } from '@/models/story.interface'
-import { createStory } from './thunks';
+import { createStory, editStory } from './thunks';
 
 interface AuthState {
   story: Story | null
@@ -27,6 +27,12 @@ export const storySlice = createSlice({
       state.status = action.payload
     })
     builder.addCase(createStory.rejected, (state, action) => {
+      state.status = action.payload
+    })
+    builder.addCase(editStory.fulfilled, (state, action) => {
+      state.status = action.payload
+    })
+    builder.addCase(editStory.rejected, (state, action) => {
       state.status = action.payload
     })
   }
