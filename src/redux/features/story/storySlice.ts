@@ -5,13 +5,13 @@ import { createStory } from './thunks';
 interface AuthState {
   story: Story | null
   stories: Story[] | null
-  status: 'idle' | 'pending' | 'succeeded' | 'failed'
+  status: { type: 'idle' | 'pending' | 'success' | 'error', msg: string }
 }
 
 const initialState: AuthState = {
   story: null,
   stories: [],
-  status: 'idle'
+  status: {type: 'idle', msg: ''}
 }
 
 export const storySlice = createSlice({
@@ -21,9 +21,6 @@ export const storySlice = createSlice({
     saveStories(state, action){
       state.stories = action.payload
     },
-    // getStoryById(state, action){
-    //   state.story = state.stories?.filter(story => story.id === action.payload)[0]
-    // }
   },
   extraReducers(builder) {
     builder.addCase(createStory.fulfilled, (state, action) => {

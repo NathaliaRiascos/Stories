@@ -40,7 +40,7 @@ function Stories() {
       gap={14}
     >
       {
-        stories.lenght? stories.map(({ title, story, id, imgURL}) => (
+        stories.length? stories.map(({ title, story, id, imgURL}) => (
           <Card key={id} id={id} title={title} imgURL={imgURL} story={story} />
         ))
         : <p>Oops don't have any story, add a story</p>

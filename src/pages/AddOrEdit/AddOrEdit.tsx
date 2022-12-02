@@ -7,13 +7,14 @@ import {
   Textarea,
   Stack,
   SimpleGrid,
-  Button
+  Button,
+  Alert,
+  AlertIcon
 } from '@chakra-ui/react';
 
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { createStory, getStoryById, editStory } from '@/redux/features'
 import { useParams } from 'react-router-dom'
-
 
 const initialState = {
   title: '',
@@ -32,9 +33,7 @@ function AddOrStory() {
     if ( id ) {  
       setValues(storyState)
       console.log(id, storyState)
-    } else {
-      setValues(initialState)
-    }
+    } 
   }, [id])
   
   const {
@@ -64,7 +63,7 @@ function AddOrStory() {
     e.preventDefault()
     if (id ) dispatch(editStory(values))
     else dispatch(createStory(values))
-    console.log(values)
+    setValues(initialState)
   }
 
   return (

@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { Story } from '@/models/story.interface'
-import { ref, push, child, update, remove } from "firebase/database"
+import { ref, push, child, update, remove } from 'firebase/database'
 import { db, storage, refStorage } from '@/config/firebase'
 
 import { uploadBytesResumable, getDownloadURL} from 'firebase/storage';
@@ -9,72 +9,52 @@ export const createStory = createAsyncThunk('story/createStory', async (story: S
   try {
     const storageRef = refStorage(storage, `stories/${story.imgURL.name}`)
     const uploadTask = uploadBytesResumable(storageRef, story.imgURL)
-    uploadTask.on('state_changed',
-    (snapshot) => {
-      const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-      console.log('Upload is ' + progress + '% done');
-      switch (snapshot.state) {
-        case 'paused':
-          console.log('Upload is paused');
-          break;
-        case 'running':
-          console.log('Upload is running');
-          break;
-      }
-    }, 
-    (error) => {
-      // Handle unsuccessful uploads
-    }, 
-  async () => {
     const url = await getDownloadURL(uploadTask.snapshot.ref)
-    console.log()
   
     push(child(ref(db),'stories'), {
       ...story,
       date: Date.now(),
       imgURL: url
     });
-  })
     
-    return 'succeeded'
+    return {
+      type:'success',
+      msg: 'Success story create'
+    }
   } catch (err) {
-    console.log(err)
+    thunkApi.rejectWithValue({
+      type:'error',
+      msg: 'Oops could not be created'
+    })
   }
 })
 
 export const editStory = createAsyncThunk('story/editStory', async (story: Story, thunkApi) => {
   try {
-    const storageRef = refStorage(storage, `stories/${story.imgURL.name}`)
-    const uploadTask = uploadBytesResumable(storageRef, story.imgURL)
-    uploadTask.on('state_changed',
-    (snapshot) => {
-      const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-      console.log('Upload is ' + progress + '% done');
-      switch (snapshot.state) {
-        case 'paused':
-          console.log('Upload is paused');
-          break;
-        case 'running':
-          console.log('Upload is running');
-          break;
-      }
-    }, 
-    (error) => {
-      // Handle unsuccessful uploads
-    }, 
-  async () => {
-    const url = await getDownloadURL(uploadTask.snapshot.ref)
-    console.log()
+    let url
+    if (story.imgURL.name) {
+      const storageRef = refStorage(storage, `stories/${story.imgURL.name}`)
+      const uploadTask = uploadBytesResumable(storageRef, story.imgURL)
+      url = await getDownloadURL(uploadTask.snapshot.ref)
+    } else {
+      url = story.imgURL
+    }
+
     update(ref(db,`stories/${story.id}`), {
       ...story,
       date: Date.now(),
       imgURL: url
     });
-  })
     
-    return 'succeeded'
+    return {
+      type:'success',
+      msg: 'Success story update'
+    }
   } catch (err) {
-    console.log(err)
+    thunkApi.rejectWithValue({
+      type:'error',
+      msg: 'Oops could not be updated'
+    })
   }
 })
 
@@ -82,9 +62,15 @@ export const deleteStory = createAsyncThunk('story/deleteStory', async (idStory:
   try { 
     remove(child(ref(db),`stories/${idStory}`))
     console.log('si')
-    return 'succeeded'
+    return {
+      type:'success',
+      msg: 'Success story delete'
+    }
   } catch (err) {
-    console.log(err)
+    thunkApi.rejectWithValue({
+      type:'error',
+      msg: 'Oops could not be deleted'
+    })
   }
 })
 
