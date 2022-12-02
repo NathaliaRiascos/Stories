@@ -8,13 +8,13 @@ import {
   Stack,
   SimpleGrid,
   Button,
-  Alert,
-  AlertIcon
 } from '@chakra-ui/react';
 
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { createStory, getStoryById, editStory } from '@/redux/features'
 import { useParams } from 'react-router-dom'
+import toast, { Toaster } from 'react-hot-toast';
+
 
 const initialState = {
   title: '',
@@ -26,6 +26,8 @@ const initialState = {
 function AddOrStory() {
   const { id } = useParams()
   const storyState = useAppSelector(state => getStoryById(state, id))
+  const statusState = useAppSelector(state => state.story.status)
+
   const [values, setValues] = useState(initialState)
   const dispatch = useAppDispatch()
 
@@ -36,6 +38,12 @@ function AddOrStory() {
     } 
   }, [id])
   
+  useEffect(() => {
+    if (statusState.type !== 'idle'){
+      if (statusState.type === 'success') toast.success(statusState.msg)
+      else toast.error(statusState.msg)
+    }
+  }, [statusState])
   const {
     title,
     category,
@@ -67,6 +75,8 @@ function AddOrStory() {
   }
 
   return (
+    <>
+      <Toaster />
     <form onSubmit={handleSubmit}>
       <SimpleGrid
         maxWidth={['sm', '2xl']}
@@ -161,6 +171,7 @@ function AddOrStory() {
         </Box>
       </SimpleGrid>
     </form>
+    </>
   )
 }
 
