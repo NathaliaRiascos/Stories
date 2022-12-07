@@ -1,10 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { Story } from '@/models/story.interface'
-import { createStory, editStory } from './thunks';
+import { createStory, editStory, deleteStory } from './thunks';
 import { RootState } from '@/redux/store';
 import toast from 'react-hot-toast';
-
-type Status = 'idle' | 'pending' | 'success' | 'error'
 
 interface StoryState {
   story: Story | null
@@ -37,6 +35,12 @@ export const storySlice = createSlice({
       toast.success(action.payload)
     })
     builder.addCase(editStory.rejected, (state, action: PayloadAction<any>) => {
+      toast.error(action.payload)
+    })
+    builder.addCase(deleteStory.fulfilled, (state, action: PayloadAction<any>) => {
+      toast.success(action.payload)
+    })
+    builder.addCase(deleteStory.rejected, (state, action: PayloadAction<any>) => {
       toast.error(action.payload)
     })
   }
