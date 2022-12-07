@@ -1,7 +1,8 @@
 export interface Story {
-  date: string
+  id?: string
+  date?: string
   title: string
   story: string
   category: string
-  imgURL: string
+  imgURL: any
 }

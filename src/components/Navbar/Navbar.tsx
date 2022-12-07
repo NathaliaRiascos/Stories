@@ -1,22 +1,9 @@
 import { ReactNode } from 'react';
 import {
-  Box,
-  Flex,
-  Avatar,
-  HStack,
   Link,
-  IconButton,
-  Button,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  MenuDivider,
-  useDisclosure,
-  useColorModeValue,
-  Stack,
+  useColorModeValue
 } from '@chakra-ui/react';
-import { HamburgerIcon, CloseIcon, AddIcon } from '@chakra-ui/icons';
+
 
 const Links = [
   {
@@ -25,8 +12,12 @@ const Links = [
   },
 ];
 
+interface Props {
+  to: string;
+  children: React.ReactElement | React.ReactElement[] | string
+}
 
-const NavLink = ({ to, children }) => (
+const NavLink = ({ to, children }: Props) => (
   <Link
     px={2}
     py={1}
@@ -44,7 +35,7 @@ function Navbar() {
   return (
     <>
       {Links.map((link) => (
-        <NavLink key={link.name} to={link.path}>{link.name}</NavLink>
+        <NavLink key={link.name} to={link.path}>{ link.name }</NavLink>
       ))}
     </>
   )

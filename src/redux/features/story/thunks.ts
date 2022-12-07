@@ -17,15 +17,9 @@ export const createStory = createAsyncThunk('story/createStory', async (story: S
       imgURL: url
     });
     
-    return {
-      type:'success',
-      msg: 'Success story create'
-    }
+    return 'Success story create'
   } catch (err) {
-    thunkApi.rejectWithValue({
-      type:'error',
-      msg: 'Oops could not be created'
-    })
+    thunkApi.rejectWithValue('Oops could not be created')
   }
 })
 
@@ -46,10 +40,7 @@ export const editStory = createAsyncThunk('story/editStory', async (story: Story
       imgURL: url
     });
     
-    return {
-      type:'success',
-      msg: 'Success story update'
-    }
+    return 'Success story update'
   } catch (err) {
     thunkApi.rejectWithValue({
       type:'error',
@@ -61,16 +52,9 @@ export const editStory = createAsyncThunk('story/editStory', async (story: Story
 export const deleteStory = createAsyncThunk('story/deleteStory', async (idStory: string, thunkApi) => {
   try { 
     remove(child(ref(db),`stories/${idStory}`))
-    console.log('si')
-    return {
-      type:'success',
-      msg: 'Success story delete'
-    }
+    return 'Success story delete'
   } catch (err) {
-    thunkApi.rejectWithValue({
-      type:'error',
-      msg: 'Oops could not be deleted'
-    })
+    thunkApi.rejectWithValue('Oops could not be deleted')
   }
 })
 

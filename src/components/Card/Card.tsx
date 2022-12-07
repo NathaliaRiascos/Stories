@@ -22,14 +22,21 @@ import { useNavigate } from 'react-router-dom'
 import { deleteStory } from '@/redux/features';
 import { useAppDispatch } from '@/redux/hooks';
 
-function CardComponent({ id, story, title, imgURL }) {
+interface Props {
+  id: string
+  story: string
+  title: string
+  imgURL: string
+}
+
+function CardComponent({ id, story, title, imgURL }: Props) {
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
 
   return (
     <Card w='full' bgColor='white' >
   <CardHeader>
-    <Flex spacing='4'>
+    <Flex gap={4}>
       <Flex flex='1' gap='4' alignItems='center' flexWrap='wrap'>
         <Avatar name='Segun Adebayo' src='https://bit.ly/sage-adebayo' />
         <Box>

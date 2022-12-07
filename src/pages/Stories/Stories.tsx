@@ -10,7 +10,8 @@ import { useAppDispatch } from '@/redux/hooks'
 
 import { saveStories } from '@/redux/features';
 import { useAppSelector } from '@/redux/hooks';
-import { Story } from '../../models/story.interface';
+import { Story } from '@/models/story.interface';
+import { Toaster } from 'react-hot-toast';
 
 
 function Stories() {
@@ -39,9 +40,10 @@ function Stories() {
       align='center'
       gap={14}
     >
+      <Toaster />
       {
-        stories.length? stories.map(({ title, story, id, imgURL}) => (
-          <Card key={id} id={id} title={title} imgURL={imgURL} story={story} />
+        stories?.length? stories?.map(({ title, story, id, imgURL}) => (
+          <Card key={id} id={id!} title={title} imgURL={imgURL} story={story} />
         ))
         : <p>Oops don't have any story, add a story</p>
       }

@@ -11,9 +11,10 @@ import {
 } from '@chakra-ui/react';
 
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
-import { createStory, getStoryById, editStory } from '@/redux/features'
-import { useParams } from 'react-router-dom'
-import toast, { Toaster } from 'react-hot-toast';
+import { createStory, getStoryById, editStory, clearStoryState } from '@/redux/features';
+import { useParams, useNavigate } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
+import { Story } from '@/models/story.interface';
 
 
 const initialState = {
@@ -25,25 +26,21 @@ const initialState = {
 
 function AddOrStory() {
   const { id } = useParams()
-  const storyState = useAppSelector(state => getStoryById(state, id))
-  const statusState = useAppSelector(state => state.story.status)
+  const storyState = useAppSelector(state => getStoryById(state, id!))
 
-  const [values, setValues] = useState(initialState)
+  const [values, setValues] = useState<any>(initialState)
   const dispatch = useAppDispatch()
+  const navigate = useNavigate()
 
   useEffect(() => { 
     if ( id ) {  
       setValues(storyState)
       console.log(id, storyState)
-    } 
-  }, [id])
-  
-  useEffect(() => {
-    if (statusState.type !== 'idle'){
-      if (statusState.type === 'success') toast.success(statusState.msg)
-      else toast.error(statusState.msg)
+    } else {
+      setValues(initialState)
     }
-  }, [statusState])
+  }, [id])
+
   const {
     title,
     category,
@@ -60,7 +57,6 @@ function AddOrStory() {
 
   const handleFile = ({ target }:  ChangeEvent<HTMLInputElement>) => {
     const file = target.files && target.files[0]
-    console.log(values)
       setValues({
         ...values,
         [target.name]: file
@@ -69,7 +65,10 @@ function AddOrStory() {
 
   const handleSubmit = (e: React.FormEvent | MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
-    if (id ) dispatch(editStory(values))
+    if (id ) {
+      dispatch(editStory(values))
+      navigate('/')
+    }
     else dispatch(createStory(values))
     setValues(initialState)
   }

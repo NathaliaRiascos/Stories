@@ -5,18 +5,12 @@ import {
   Flex,
   Avatar,
   Button,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  MenuDivider,
   HStack,
   Center,
   IconButton,
   useDisclosure
 } from '@chakra-ui/react';
 
-import { logout } from '@/redux/features'
 import { Navbar } from '@/components'
 import { AddIcon, CloseIcon, HamburgerIcon  } from '@chakra-ui/icons';
 import { Stack } from '@chakra-ui/react';
