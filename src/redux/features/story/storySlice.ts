@@ -25,7 +25,6 @@ export const storySlice = createSlice({
   },
   extraReducers(builder) {
     builder.addCase(createStory.fulfilled, (state, action: PayloadAction<any>) => { 
-      console.log(action.payload)
       toast.success(action.payload)
     })
     builder.addCase(createStory.rejected, (state, action: PayloadAction<any>) => {

@@ -35,7 +35,6 @@ function AddOrStory() {
   useEffect(() => { 
     if ( id ) {  
       setValues(storyState)
-      console.log(id, storyState)
     } else {
       setValues(initialState)
     }

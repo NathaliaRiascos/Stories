@@ -3,20 +3,20 @@ import { Story } from '@/models/story.interface'
 import { ref, push, child, update, remove } from 'firebase/database'
 import { db, storage, refStorage } from '@/config/firebase'
 
-import { uploadBytesResumable, getDownloadURL} from 'firebase/storage';
+import { getDownloadURL, uploadBytes} from 'firebase/storage';
 
 export const createStory = createAsyncThunk('story/createStory', async (story: Story, thunkApi) => {
   try {
-    const storageRef = refStorage(storage, `stories/${story.imgURL.name}`)
-    const uploadTask = uploadBytesResumable(storageRef, story.imgURL)
-    const url = await getDownloadURL(uploadTask.snapshot.ref)
-  
+    const name = Date.now() + '-' + story.imgURL.name 
+    const storageRef = refStorage(storage, `stories/${name}`)
+    const uploadTask = await uploadBytes(storageRef, story.imgURL)
+    const url = await getDownloadURL(uploadTask.ref)
+
     push(child(ref(db),'stories'), {
       ...story,
       date: Date.now(),
       imgURL: url
-    });
-    
+    })
     return 'Success story create'
   } catch (err) {
     thunkApi.rejectWithValue('Oops could not be created')
@@ -27,9 +27,10 @@ export const editStory = createAsyncThunk('story/editStory', async (story: Story
   try {
     let url
     if (story.imgURL.name) {
-      const storageRef = refStorage(storage, `stories/${story.imgURL.name}`)
-      const uploadTask = uploadBytesResumable(storageRef, story.imgURL)
-      url = await getDownloadURL(uploadTask.snapshot.ref)
+      const name = Date.now() + '-' + story.imgURL.name 
+      const storageRef = refStorage(storage, `stories/${name}`)
+      const uploadTask = await uploadBytes(storageRef, story.imgURL)
+      url = await getDownloadURL(uploadTask.ref)
     } else {
       url = story.imgURL
     }
