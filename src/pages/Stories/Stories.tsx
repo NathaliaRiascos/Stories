@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { ref, onValue,  } from 'firebase/database'
+import { ref, onValue, orderByChild, query,  } from 'firebase/database'
 import { db } from '@/config/firebase'
 
 import { Card } from '@/components'
@@ -25,7 +25,7 @@ function Stories() {
       const data = snapshot.val();
       if ( data ) {
         Object.keys(data).forEach(key => temp.push({id: key, ...data[key]}))
-        dispatch(saveStories(temp))
+        dispatch(saveStories(temp.reverse()))
       } else {
         dispatch(saveStories([]))
       }
